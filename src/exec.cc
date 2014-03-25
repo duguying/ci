@@ -2,8 +2,10 @@
 
 using namespace ojs;
 
+#if defined _WIN32  //Windows
+
 string Exec::execute(string cmd){
-    char buffer[MAX_PATH_LENGTH] = {0};       //保存命令行输出   
+    char buffer[MAX_PATH_LENGTH] = {0};                                  //保存命令行输出   
 
     DWORD bytesRead = 0;  
     SECURITY_ATTRIBUTES sa = {0};                                              
@@ -11,9 +13,8 @@ string Exec::execute(string cmd){
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);    
     sa.lpSecurityDescriptor = NULL;    
     sa.bInheritHandle = TRUE;    
-    if (!CreatePipe(&hRead, &hWrite, &sa,0))                             //创建管道   
-    {    
-        return NULL;    
+    if (!CreatePipe(&hRead, &hWrite, &sa,0)){//创建管道  
+        return NULL;
     }    
     STARTUPINFO si = {0};    
     PROCESS_INFORMATION pi = {0};    
@@ -26,7 +27,7 @@ string Exec::execute(string cmd){
 	
     cmd="cmd.exe /C "+cmd;
     char* cmdstring=(char*)cmd.c_str();
-    if (!CreateProcess(NULL, 
+    if (!CreateProcess(NULL,
 					cmdstring, 
 					NULL, 
 					NULL, 
@@ -35,8 +36,7 @@ string Exec::execute(string cmd){
 					NULL, 
 					NULL,
 					&si,
-					&pi))  
-    {
+					&pi)){
 		cout<<"Create Process Error: "<<GetLastError()<<endl;
 		cout<<"Execute: ["<<cmdstring<<"] failed!"<<endl;
         CloseHandle(hWrite);   
@@ -50,7 +50,28 @@ string Exec::execute(string cmd){
     CloseHandle(hWrite);                                               //关闭管道的写句柄   
     ReadFile(hRead, buffer, MAX_PATH_LENGTH, &bytesRead, NULL);        //从管道中读取 运行结果   
     CloseHandle(hRead);                                                //关闭管道的读句柄   
-       
-	// cout<<"result:"<<buffer<<endl;
+    
     return buffer;   
-}  
+}
+
+#else   // Unix, Linux, MacOS
+
+string Exec::execute(string cmd){   
+    char buf_ps[1024];
+    string buffer="";
+    FILE *ptr;
+
+    if((ptr=popen(cmd.c_str(), "r"))!=NULL){
+        while(fgets(buf_ps, 1024, ptr)!=NULL){  
+           buffer=buffer+buf_ps; 
+        }   
+        pclose(ptr);
+        ptr = NULL;   
+    }else{
+        cout<<"popen "<<cmd<<" error"<<endl;
+        return NULL;
+    }  
+    return buffer; 
+}
+
+#endif

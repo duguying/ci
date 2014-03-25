@@ -1,7 +1,15 @@
 #include <iostream>
 #include <string>
-#include "windows.h"
-#include "tchar.h"
+
+#ifndef _OJ_EXEC_HH_
+#define _OJ_EXEC_HH_ 
+
+#if defined _WIN32
+	#include "windows.h"
+	#include "tchar.h"
+#else
+	#include "stdio.h"
+#endif
 
 using namespace std;
 
@@ -19,3 +27,5 @@ namespace ojs{
 		/* data */
 	};
 }
+
+#endif
