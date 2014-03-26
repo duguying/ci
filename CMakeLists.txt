@@ -36,6 +36,7 @@ if(WIN32)
 		${SRC_DIR}/executer/exec.cc
 		${SRC_DIR}/server/serv_win.cc
 		${SRC_DIR}/websocket/socket.cc
+		${SRC_DIR}/websocket/thread.cc
 		${SRC_DIR}/websocket/websocket.cc
 	)
 
@@ -46,6 +47,7 @@ else(UNIX)
 		${SRC_DIR}/executer/exec.cc
 		${SRC_DIR}/server/serv_unix.cc
 		${SRC_DIR}/websocket/socket.cc
+		${SRC_DIR}/websocket/thread.cc
 		${SRC_DIR}/websocket/websocket.cc
 	)
 endif(WIN32)
@@ -77,6 +79,22 @@ endif(WIN32)
 
 ADD_TEST(T_CONF "./bin/test_socket")
 
+#
+
+set(
+	T_SOCKET_LIST
+	${TEST_DIR}/thread.cc
+	${SRC_DIR}/websocket/thread.cc
+)
+
+add_executable(test_thread ${T_SOCKET_LIST})
+
+# if(WIN32)
+# 	target_link_libraries(test_thread ws2_32)
+# else(UNIX)
+# endif(WIN32)
+
+ADD_TEST(T_CONF "./bin/test_thread")
 
 
 

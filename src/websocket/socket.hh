@@ -9,11 +9,13 @@ class Socket
 private:
 	WSADATA wsa_data;
 	SOCKET listen_socket;
-	SOCKET server_socket;
+	SOCKET client_socket;
 	struct sockaddr_in serv_addr;
 public:
 	Socket(string, int);
 	~Socket();
+
+	int listening();
 
 	/* data */
 };
