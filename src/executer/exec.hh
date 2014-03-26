@@ -19,10 +19,10 @@ namespace ojs{
 	class Exec
 	{
 	public:
-		Exec(){};
-		~Exec(){};
+		Exec();
+		~Exec();
 
-		string execute(string cmd);
+		string execute(string);
 	
 		/* data */
 	};

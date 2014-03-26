@@ -29,14 +29,56 @@ include_directories("src/include")
 include_directories("src")
 
 #############################################################
+if(WIN32)
+	set(
+		CORE_LIST 
+		${SRC_DIR}/ojcore.cc
+		${SRC_DIR}/executer/exec.cc
+		${SRC_DIR}/server/serv_win.cc
+		${SRC_DIR}/websocket/socket.cc
+		${SRC_DIR}/websocket/websocket.cc
+	)
 
-set(
-	CORE_LIST 
-	${SRC_DIR}/ojserver.cc
-	${SRC_DIR}/exec.cc
-)
+else(UNIX)
+	set(
+		CORE_LIST 
+		${SRC_DIR}/ojcore.cc
+		${SRC_DIR}/executer/exec.cc
+		${SRC_DIR}/server/serv_unix.cc
+		${SRC_DIR}/websocket/socket.cc
+		${SRC_DIR}/websocket/websocket.cc
+	)
+endif(WIN32)
+
 
 add_executable(ojcore ${CORE_LIST})
 
+if(WIN32)
+	target_link_libraries(ojcore ws2_32)
+else(UNIX)
+endif(WIN32)
+
+##########################################################################
+
+ENABLE_TESTING()
+
+set(
+	T_SOCKET_LIST
+	${TEST_DIR}/socket.cc
+	${SRC_DIR}/websocket/socket.cc
+)
+
+add_executable(test_socket ${T_SOCKET_LIST})
+
+if(WIN32)
+	target_link_libraries(test_socket ws2_32)
+else(UNIX)
+endif(WIN32)
+
+ADD_TEST(T_CONF "./bin/test_socket")
 
 
+
+
+
+cmake_minimum_required(VERSION 2.8)

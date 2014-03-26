@@ -4,6 +4,10 @@ using namespace ojs;
 
 #if defined _WIN32  //Windows
 
+Exec::Exec(){}
+
+Exec::~Exec(){}
+
 string Exec::execute(string cmd){
     char buffer[MAX_PATH_LENGTH] = {0};                                  //保存命令行输出   
 
@@ -14,6 +18,7 @@ string Exec::execute(string cmd){
     sa.lpSecurityDescriptor = NULL;    
     sa.bInheritHandle = TRUE;    
     if (!CreatePipe(&hRead, &hWrite, &sa,0)){//创建管道  
+        cout<<"CreatePipe Error: "<<GetLastError()<<endl;
         return NULL;
     }    
     STARTUPINFO si = {0};    
@@ -43,12 +48,20 @@ string Exec::execute(string cmd){
         CloseHandle(hRead);   
         return NULL;   
     }    
-    WaitForSingleObject(pi.hProcess,INFINITE);                         //等待进程结束   
+    // WaitForSingleObject(pi.hProcess,INFINITE);                         //等待进程结束   
          
     CloseHandle(pi.hProcess);                                          //关闭新进程的主线程   
     CloseHandle(pi.hThread);										   //关闭新进程   
     CloseHandle(hWrite);                                               //关闭管道的写句柄   
-    ReadFile(hRead, buffer, MAX_PATH_LENGTH, &bytesRead, NULL);        //从管道中读取 运行结果   
+    for (;;)
+    {
+        memset(buffer,0,MAX_PATH_LENGTH);
+        if(0==ReadFile(hRead, buffer, MAX_PATH_LENGTH, &bytesRead, NULL)){        //从管道中读取 运行结果   
+            break;
+            }
+        cout<<buffer;
+    }
+    
     CloseHandle(hRead);                                                //关闭管道的读句柄   
     
     return buffer;   
