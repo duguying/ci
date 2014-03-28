@@ -1,7 +1,8 @@
 #include "thread.hh"
 
-Thread::Thread(DWORD WINAPI fun(LPVOID)){
+Thread::Thread(DWORD WINAPI fun(LPVOID), LPVOID arg){
 	this->hook=&fun;	//成功将函数传入对象
+	this->arg=arg;
 }
 
 Thread::~Thread(){}
@@ -12,7 +13,7 @@ bool Thread::go(){
 		NULL,
 		0,
 		*this->hook,
-		NULL,
+		this->arg,
 		0,
 		&this->tid);
 

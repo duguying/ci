@@ -52,3 +52,15 @@ int Socket::listening(){
         cout<<"OK!";
     }
 };
+
+int Socket::receiving(){
+    return 0;
+}
+
+int Socket::send(){
+    return 0;
+}
+
+Socket* Socket::pointer_to_socket(LPVOID arg){
+    return ((Socket*)arg);
+}

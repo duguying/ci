@@ -67,7 +67,9 @@ ENABLE_TESTING()
 set(
 	T_SOCKET_LIST
 	${TEST_DIR}/socket.cc
+	${SRC_DIR}/websocket/thread.cc
 	${SRC_DIR}/websocket/socket.cc
+	${SRC_DIR}/websocket/websocket.cc
 )
 
 add_executable(test_socket ${T_SOCKET_LIST})
@@ -81,20 +83,7 @@ ADD_TEST(T_CONF "./bin/test_socket")
 
 #
 
-set(
-	T_SOCKET_LIST
-	${TEST_DIR}/thread.cc
-	${SRC_DIR}/websocket/thread.cc
-)
 
-add_executable(test_thread ${T_SOCKET_LIST})
-
-# if(WIN32)
-# 	target_link_libraries(test_thread ws2_32)
-# else(UNIX)
-# endif(WIN32)
-
-ADD_TEST(T_CONF "./bin/test_thread")
 
 
 
