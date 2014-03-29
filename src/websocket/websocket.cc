@@ -10,5 +10,4 @@ unsigned char Websocket::frame_def[22][2]={
 
 char* Websocket::key="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
-Websocket::Websocket(){}
-Websocket::~Websocket(){}
+

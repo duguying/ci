@@ -24,6 +24,7 @@ bool Thread::go(){
 	}else{
 		return true;
 	}
+	return false;
 }
 
 DWORD Thread::get_tid(){

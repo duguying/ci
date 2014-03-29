@@ -2,10 +2,11 @@
 #define _OJSERVER_WEBSOCKET_HH_
 
 #include <iostream>
+#include "socket.hh"
 
 using namespace std;
 
-class Websocket
+class Websocket : Socket 
 {
 public:
 	/// 基本帧缓冲区长度4
@@ -13,7 +14,7 @@ public:
 	static unsigned char frame_def[22][2];
 	static char* key;
 
-	Websocket();
+	Websocket(string, int);
 	~Websocket();
 
 	/* data */

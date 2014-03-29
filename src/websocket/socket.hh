@@ -7,27 +7,40 @@
 
 using namespace std;
 
+#define BUFFER_LEN 129
+
 class Socket
 {
 private:
 	WSADATA wsa_data;
 	SOCKET listen_socket;
-	SOCKET client_socket;
+	
 	struct sockaddr_in serv_addr;
+	
 public:
 	Socket(string, int);
 	~Socket();
+
+	SOCKET client_socket;
+	char buffer[BUFFER_LEN];
 
 	/**
 	 * 持续监听来自客户端的连接
 	 * @return [连接状态-1失败]
 	 */
 	int listening();
+
 	/**
-	 * 持续监听来自客户端的信息
+	 * 启动socket
 	 * @return [description]
 	 */
-	int receiving();
+	int start();
+
+	/**
+	 * 处理信息
+	 */
+	int dealmsg(char*);
+	
 	/**
 	 * 向客户端发送信息
 	 * @return [description]
