@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class Websocket : Socket 
+class Websocket  
 {
 public:
 	/// 基本帧缓冲区长度4
@@ -16,6 +16,14 @@ public:
 
 	Websocket(string, int);
 	~Websocket();
+
+	/**
+	 * 启动socket
+	 * @return [description]
+	 */
+	// int start();
+
+	// int dealmsg(char* buffer);
 
 	/* data */
 };

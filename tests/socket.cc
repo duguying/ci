@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <string>
-#include "websocket/socket.hh"
+#include "websocket/websocket.hh"
 #include "websocket/thread.hh"
 #include "websocket/encrypt.hh"
 #include "regex++/regex.hh"
@@ -10,9 +10,16 @@
 
 using namespace std;
 
+int test_deal_msg(char* response, SOCKET sid){
+	cout<<"Socket ID: "<<sid<<"\nResponse: "<<response<<endl;
+	Socket::send_msg(sid,"ok!",4);
+	return 0;
+}
+
 int main(int argc, char const *argv[])
 {
 	Socket ts("127.0.0.1",107);
+	ts.dealmsg=test_deal_msg;
 	ts.start();
 
 	RegEx re;

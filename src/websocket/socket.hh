@@ -37,15 +37,15 @@ public:
 	int start();
 
 	/**
-	 * 处理信息
+	 * 处理信息函数指针
 	 */
-	int dealmsg(char*);
+	int (*dealmsg)(char*,SOCKET);
 	
 	/**
 	 * 向客户端发送信息
 	 * @return [description]
 	 */
-	int send();
+	static int send_msg(SOCKET skt, char* buffer, int len);
 
 	/**
 	 * 将空指针强制转换为Socket*

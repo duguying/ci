@@ -32,7 +32,7 @@ Socket::Socket(string addr, int port){
     this->serv_addr.sin_addr.s_addr = inet_addr(addr.c_str());
     this->serv_addr.sin_port = htons(port);
 
-    
+    dealmsg=NULL;
 }
 
 Socket::~Socket(){}
@@ -52,15 +52,21 @@ THR_HOOK(receiving_hook, arg){
 
     Socket* skt=Socket::pointer_to_socket(arg);
 
+    SOCKET recv_skt=skt->client_socket;
+
     while(true){
+        memset(skt->buffer,0,BUFFER_LEN);
         rev_rst=recv(
-            skt->client_socket,
+            recv_skt,
             skt->buffer,
             BUFFER_LEN,
             0);
         if (rev_rst>0){
-            // cout<<"status: "<<rev_rst<<"\tdebug: "<<skt->buffer<<endl;
-            skt->dealmsg(skt->buffer);//do something
+            if(skt->dealmsg==NULL){
+                cout<<"Respnose Handler Function Dose Not Exist!\n";
+            }else{
+                skt->dealmsg(skt->buffer,recv_skt);//do something
+            }
         }else if(rev_rst==0){
             cout<<"status: closed"<<endl;
             return 0;
@@ -74,7 +80,11 @@ THR_HOOK(receiving_hook, arg){
 int Socket::listening(){
     int op_ret=0;
 
-    op_ret = bind(this->listen_socket, (struct sockaddr*)&this->serv_addr, sizeof(this->serv_addr));
+    op_ret = bind(
+        this->listen_socket, 
+        (struct sockaddr*)&this->serv_addr, 
+        sizeof(this->serv_addr));
+
     if ( op_ret != 0 )
     {
         cerr<<"Bind Socket Failed::"<<GetLastError()<<endl;
@@ -93,29 +103,26 @@ int Socket::listening(){
         {
             cerr<<"Connect Failed!\n";
         }else{
-            cout<<"Connected!\n";
             //start recv
             Thread rev_thr(receiving_hook, this);
             if(rev_thr.go()){
-                cout<<rev_thr.get_tid()<<endl;
+                cout<<"Thread id: "<<rev_thr.get_tid()<<" Connected!"<<endl;
             };
         }
-        cout<<"OK!";
     }
 };
 
 
 
-int Socket::send(){
-    return 0;
+int Socket::send_msg(SOCKET skt, char* buffer, int len){
+    int send_rst=send(skt,
+        buffer,
+        len,
+        0);
+
+    return send_rst;
 }
 
 Socket* Socket::pointer_to_socket(LPVOID arg){
     return ((Socket*)arg);
-}
-
-
-int Socket::dealmsg(char* buffer){
-    cout<<"dealmsg show buffer: "<<buffer<<endl;
-    return 0;
 }
