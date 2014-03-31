@@ -2,28 +2,59 @@
 #define _OJSERVER_WEBSOCKET_HH_
 
 #include <iostream>
-#include "socket.hh"
+#include <string>
+
+#pragma warning(disable : 4786)
+
+#include "regex++/regex.hh"
+#include "websocket/encrypt.hh"
 
 using namespace std;
+
+typedef struct _ojs_table_item
+{
+	char* key;
+	char* value;
+} ojs_table_item;
 
 class Websocket  
 {
 public:
-	/// 基本帧缓冲区长度4
-	static unsigned int base_frame_buf_len;
 	static unsigned char frame_def[22][2];
 	static char* key;
 
-	Websocket(string, int);
+	/// 聚合后的信息
+	string message;
+
+	/// 是否已经握手
+	bool shaked_hands;
+	/// 握手返回信息
+	string handshake_response;
+	/// 当前连接的头部信息
+	ojs_table_item header[20];
+
+	char* header_content;
+
+
+
+	Websocket();
 	~Websocket();
 
 	/**
-	 * 启动socket
-	 * @return [description]
+	 * 解析帧 聚合帧为信息
+	 * @param  response [description]
+	 * @return          [description]
 	 */
-	// int start();
+	bool response_gather(char* response);
 
-	// int dealmsg(char* buffer);
+	/**
+	 * 握手 解析头部
+	 * @param  response [description]
+	 * @return          [description]
+	 */
+	bool shakehands(char* response);
+
+	bool header_parser(const char* header);
 
 	/* data */
 };

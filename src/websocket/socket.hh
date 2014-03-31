@@ -4,10 +4,11 @@
 #include <iostream>
 #include <string>
 #include "windows.h"
+#include "websocket/websocket.hh"
 
 using namespace std;
 
-#define BUFFER_LEN 129
+#define BUFFER_LEN 130
 
 class Socket
 {
@@ -23,6 +24,7 @@ public:
 
 	SOCKET client_socket;
 	char buffer[BUFFER_LEN];
+	
 
 	/**
 	 * 持续监听来自客户端的连接
@@ -39,7 +41,7 @@ public:
 	/**
 	 * 处理信息函数指针
 	 */
-	int (*dealmsg)(char*,SOCKET);
+	int (*dealmsg)(char*,SOCKET,void*);
 	
 	/**
 	 * 向客户端发送信息

@@ -49,6 +49,7 @@ int Socket::start(){
 
 THR_HOOK(receiving_hook, arg){
     int rev_rst;
+    Websocket wsp; // Websocket
 
     Socket* skt=Socket::pointer_to_socket(arg);
 
@@ -59,13 +60,13 @@ THR_HOOK(receiving_hook, arg){
         rev_rst=recv(
             recv_skt,
             skt->buffer,
-            BUFFER_LEN,
+            BUFFER_LEN-1,
             0);
         if (rev_rst>0){
             if(skt->dealmsg==NULL){
                 cout<<"Respnose Handler Function Dose Not Exist!\n";
             }else{
-                skt->dealmsg(skt->buffer,recv_skt);//do something
+                skt->dealmsg(skt->buffer,recv_skt,&wsp);//do something
             }
         }else if(rev_rst==0){
             cout<<"status: closed"<<endl;
@@ -106,17 +107,20 @@ int Socket::listening(){
             //start recv
             Thread rev_thr(receiving_hook, this);
             if(rev_thr.go()){
-                cout<<"Thread id: "<<rev_thr.get_tid()<<" Connected!"<<endl;
+                // cout<<"Thread id: "<<rev_thr.get_tid()<<" Connected!"<<endl;
             };
         }
     }
 };
 
+int Socket::send_msg(SOCKET skt, char* message, int len){
+    char send_buffer[BUFFER_LEN*2];
 
+    memset(send_buffer, 0, 2*BUFFER_LEN*sizeof(char));
+    memcpy(send_buffer, message, len);
 
-int Socket::send_msg(SOCKET skt, char* buffer, int len){
     int send_rst=send(skt,
-        buffer,
+        send_buffer,
         len,
         0);
 

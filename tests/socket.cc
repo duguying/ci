@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <string>
-#include "websocket/websocket.hh"
+#include "websocket/socket.hh"
 #include "websocket/thread.hh"
 #include "websocket/encrypt.hh"
 #include "regex++/regex.hh"
@@ -10,9 +10,28 @@
 
 using namespace std;
 
-int test_deal_msg(char* response, SOCKET sid){
-	cout<<"Socket ID: "<<sid<<"\nResponse: "<<response<<endl;
-	Socket::send_msg(sid,"ok!",4);
+
+
+int test_deal_msg(char* response, SOCKET sid, void* websocket){
+	Websocket* wsp=(Websocket*)websocket;
+	if (wsp->shaked_hands==false)
+	{
+		if(wsp->shakehands(response)){
+			int dec;
+			string skhmsg=wsp->handshake_response;
+			dec=Socket::send_msg(sid, ((char* )skhmsg.c_str()), skhmsg.length());
+			// cout<<"result"<<dec<<endl;
+			dec=Socket::send_msg(sid, "\x81\x7fhi!", 8);
+			// cout<<"result"<<dec<<endl;
+		}
+	}else{
+		cout<<"recvd: "<<response<<endl;
+		// string message=wsp.response_gather(response);
+		// if(""!=message){
+			// cout<<"Socket ID: "<<sid<<"\nResponse: "<<message<<endl;
+		// }
+	}
+	// Socket::send_msg(sid,"ok!",4);
 	return 0;
 }
 
