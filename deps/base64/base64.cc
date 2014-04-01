@@ -5,6 +5,7 @@
  *	Date: 		December 22nd, 2011
  *	License:	Free to use and distribute as long as this notice is kept.
  */
+
 #include "base64.hh"
 
 /**
@@ -301,7 +302,7 @@ void Base64::encodeFile(const char * inFile, const char * outFile, const char * 
 	 * Get the file's size and make sure it's not an empty file.
 	 */
 	fin.seekg(0, std::ios::end);
-	ulong fileLength = fin.tellg();
+	ulong fileLength = (ulong)fin.tellg();
 	fin.seekg(0, std::ios::beg);
 	
 	if(!fileLength)
@@ -408,7 +409,7 @@ void Base64::decodeFile(const char * inFile, const char * outFile) throw (std::r
 	 * Get the file's size and make sure it's not an empty file.
 	 */
 	fin.seekg(0, std::ios::end);
-	ulong fileLength = fin.tellg();
+	ulong fileLength = (ulong)fin.tellg();
 	fin.seekg(0, std::ios::beg);
 	
 	if(!fileLength)

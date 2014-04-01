@@ -5,6 +5,7 @@
  *	Date: 		December 22nd, 2011
  *	License:	Free to use and distribute as long as this notice is kept.
  */
+#pragma warning(disable : 4290)
 #pragma once
 
 #include <cctype>

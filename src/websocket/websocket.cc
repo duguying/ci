@@ -46,7 +46,7 @@ bool Websocket::header_parser(const char* ws_header){
 	memset(this->header_content,0,buf_size);
 	strncpy(this->header_content,ws_header,len);
 
-	for (int i = 0; i < len; ++i)
+	for (unsigned int i = 0; i < len; ++i)
 	{
 		if (str_head)
 		{

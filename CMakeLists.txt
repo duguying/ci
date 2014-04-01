@@ -3,7 +3,8 @@ project(ojserver)
 ############################################################
 # Debug support
 set(CMAKE_BUILD_TYPE "Debug")
-
+add_definitions("-D_CRT_SECURE_NO_DEPRECATE")
+add_definitions("-wd4819")
 # root directory
 set(SRC_DIR "src/")
 set(TEST_DIR "tests/")
@@ -31,10 +32,10 @@ set(
 	${SRC_DIR}/executer/exec.cc
 )
 
-add_executable(ojcore ${CORE_LIST})
+add_executable(ojs ${CORE_LIST})
 
 if(WIN32)
-	target_link_libraries(ojcore ws2_32)
+	target_link_libraries(ojs ws2_32)
 else(UNIX)
 endif(WIN32)
 
