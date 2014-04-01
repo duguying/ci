@@ -1,6 +1,5 @@
 #include "exec.hh"
 
-using namespace ojs;
 
 #if defined _WIN32  //Windows
 
@@ -47,8 +46,7 @@ string Exec::execute(string cmd){
         CloseHandle(hWrite);   
         CloseHandle(hRead);   
         return NULL;   
-    }    
-    // WaitForSingleObject(pi.hProcess,INFINITE);                         //等待进程结束   
+    }  
          
     CloseHandle(pi.hProcess);                                          //关闭新进程的主线程   
     CloseHandle(pi.hThread);										   //关闭新进程   

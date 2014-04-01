@@ -19,6 +19,14 @@ typedef struct _ojs_table_item
 
 class Websocket  
 {
+private:
+	/**
+	 * 解析头
+	 * @param  header [description]
+	 * @return        [description]
+	 */
+	bool header_parser(const char* header);
+
 public:
 	static unsigned char frame_def[22][2];
 	static char* key;
@@ -35,17 +43,8 @@ public:
 
 	char* header_content;
 
-
-
 	Websocket();
 	~Websocket();
-
-	/**
-	 * 解析帧 聚合帧为信息
-	 * @param  response [description]
-	 * @return          [description]
-	 */
-	bool response_gather(char* response);
 
 	/**
 	 * 握手 解析头部
@@ -54,7 +53,11 @@ public:
 	 */
 	bool shakehands(char* response);
 
-	bool header_parser(const char* header);
+	/**
+	 * 解密并提取单帧信息
+	 * @param buffer [description]
+	 */
+	void Websocket::frame_decode(char* buffer);
 
 	/* data */
 };

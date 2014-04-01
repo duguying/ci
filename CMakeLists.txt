@@ -1,19 +1,7 @@
 project(ojserver)
 
-if(UNIX)
-	set(PLTF " Unix  ")
-	set(TGPF " Unix  ")
-elseif(WIN32)
-	set(PLTF "Windows")
-	set(TGPF "Windows")
-elseif(APPLE)
-	set(PLTF " MacOS ")
-	set(TGPF " MacOS ")
-endif(UNIX)
-
 ############################################################
-# gdb Debug support
-set(TEST true)
+# Debug support
 set(CMAKE_BUILD_TYPE "Debug")
 
 # root directory
@@ -28,48 +16,9 @@ include_directories("src")
 include_directories("deps")
 
 #############################################################
-# if(WIN32)
-# 	set(
-# 		CORE_LIST 
-# 		${SRC_DIR}/ojcore.cc
-# 		${SRC_DIR}/executer/exec.cc
-# 		${SRC_DIR}/server/serv_win.cc
-# 		${SRC_DIR}/websocket/socket.cc
-# 		${SRC_DIR}/websocket/thread.cc
-# 		${DEP}/base64.cc
-# 		${DEP}/sha1.cc
-# 		${SRC_DIR}/websocket/websocket.cc
-# 	)
-
-# else(UNIX)
-# 	set(
-# 		CORE_LIST 
-# 		${SRC_DIR}/ojcore.cc
-# 		${SRC_DIR}/executer/exec.cc
-# 		${SRC_DIR}/server/serv_unix.cc
-# 		${SRC_DIR}/websocket/socket.cc
-# 		${SRC_DIR}/websocket/thread.cc
-# 		${DEP}/base64.cc
-# 		${DEP}/sha1.cc
-# 		${SRC_DIR}/websocket/websocket.cc
-# 	)
-# endif(WIN32)
-
-
-# add_executable(ojcore ${CORE_LIST})
-
-# if(WIN32)
-# 	target_link_libraries(ojcore ws2_32)
-# else(UNIX)
-# endif(WIN32)
-
-##########################################################################
-
-ENABLE_TESTING()
-
 set(
-	T_CORE_LIST
-	${TEST_DIR}/socket.cc
+	CORE_LIST 
+	${SRC_DIR}/ojcore.cc
 	${SRC_DIR}/websocket/thread.cc
 	${SRC_DIR}/websocket/socket.cc
 	${SRC_DIR}/websocket/websocket.cc
@@ -78,18 +27,18 @@ set(
 	${SRC_DIR}/websocket/encrypt.cc
 	${DEP}/regex++/regex.cc
 	${DEP}/regex++/regexstate.cc
+	${SRC_DIR}/server/process.cc
+	${SRC_DIR}/executer/exec.cc
 )
 
-add_executable(test_core ${T_CORE_LIST})
+add_executable(ojcore ${CORE_LIST})
 
 if(WIN32)
-	target_link_libraries(test_core ws2_32)
+	target_link_libraries(ojcore ws2_32)
 else(UNIX)
 endif(WIN32)
 
-ADD_TEST(T_CONF "./bin/test_socket")
 
-#
 
 
 

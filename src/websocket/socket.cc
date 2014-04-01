@@ -66,10 +66,13 @@ THR_HOOK(receiving_hook, arg){
             if(skt->dealmsg==NULL){
                 cout<<"Respnose Handler Function Dose Not Exist!\n";
             }else{
-                skt->dealmsg(skt->buffer,recv_skt,&wsp);//do something
+                if(-1==skt->dealmsg(skt->buffer,recv_skt,&wsp)){
+                    cout<<"status: client request close!"<<endl;
+                    return 0;
+                }
             }
         }else if(rev_rst==0){
-            cout<<"status: closed"<<endl;
+            cout<<"status: closed!"<<endl;
             return 0;
         }else{
             cerr<<"Recv Error: "<<GetLastError()<<endl;

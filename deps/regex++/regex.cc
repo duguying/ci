@@ -21,7 +21,6 @@
  *  THE SOFTWARE.
  ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
 #pragma warning(disable : 4786)
-
 #include <algorithm>
 #include <sstream>
 #include <iostream>

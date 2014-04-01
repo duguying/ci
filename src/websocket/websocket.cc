@@ -8,6 +8,7 @@ Websocket::Websocket(){
 
 Websocket::~Websocket(){
 	free(this->header_content);
+	this->header_content=NULL;
 }
 
 unsigned char Websocket::frame_def[22][2]={
@@ -17,41 +18,6 @@ unsigned char Websocket::frame_def[22][2]={
 };
 
 char* Websocket::key="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-
-bool Websocket::response_gather(char* response){
-	unsigned char frame_header_1=response[0];
-	unsigned char frame_header_2=response[1];
-
-	if (
-		((Websocket::frame_def[8][1]==frame_header_1)   &&   (Websocket::frame_def[8][2]==frame_header_1)) || \
-		((Websocket::frame_def[19][1]==frame_header_1)  &&   (Websocket::frame_def[19][2]==frame_header_1)) 
-		) // 关闭
-	{
-		cout<<"operat closed!\n";
-		return false;
-	}else if (
-		((Websocket::frame_def[1][1]==frame_header_1)   &&   (Websocket::frame_def[1][2]==frame_header_1))
-		) // 0x00 文本 非尾帧
-	{
-		this->message+=*(response+2);
-		cout<<"operat fragm: "<<*(response+2)<<"\n";
-		return false;
-	}else if (
-		((Websocket::frame_def[12][1]==frame_header_1)  &&   (Websocket::frame_def[12][2]==frame_header_1)) 
-		) // 0x80 文本 尾帧
-	{
-		this->message+=*(response+2);
-		cout<<"operat msg: "<<this->message<<endl;
-		// return this->message;
-		return true;
-	}else{
-		// printf("%p\t%p\n", frame_header_1, frame_header_2);
-		// cout<<response<<endl;
-		return true;
-	}
-
-	return false;
-}
 
 bool Websocket::shakehands(char* response){
 	if (response[128]!=0)
@@ -85,24 +51,21 @@ bool Websocket::header_parser(const char* ws_header){
 		if (str_head)
 		{
 			// mark i as head
-			// cout<<"mark "<<i<<" as head"<<endl;
 			this->header[j].key=this->header_content+i; // key
 			str_head=false;
 		}else if (((char)(*(ws_header+i)))==':' && !break_flag)
 		{
-			// cout<<"mark "<<i<<" as break"<<endl;
+			// mark i as break
 			this->header[j].value=this->header_content+i+1; // value
 			this->header_content[i]=0; // 敲除:
 			break_flag=true;
 		}else if (((char)(*(ws_header+i)))=='\n'){ //tail
 			// mark i as tail
 			str_head=true;
-			// cout<<"mark "<<i<<" as tail"<<endl;
 			this->header_content[i]=0; // 敲除换行符
 			j++;
 			break_flag=false;
-		}else if (((char)(*(ws_header+i)))=='\r')
-		{
+		}else if (((char)(*(ws_header+i)))=='\r'){ // erase \r
 			this->header_content[i]=0;
 		}
 	}
@@ -129,12 +92,12 @@ bool Websocket::header_parser(const char* ws_header){
 
 			string key_appended=Websocket::key;
 			char request_key_char_buffer[50];
-			
+
 			memset(request_key_char_buffer,0,50);
 			strncpy(request_key_char_buffer,this->header[k].value,strlen(this->header[k].value));
 			strcat(request_key_char_buffer,key_appended.c_str());
 			string after_encode=base64_encode(sha1_decimal(request_key_char_buffer));
-			this->handshake_response="HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: "+after_encode+"\r\n\r\n";
+			this->handshake_response="HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: "+after_encode+"\r\nServer: Rex\r\n\r\n";
 			return true;
 			// break;
 		}
@@ -143,3 +106,14 @@ bool Websocket::header_parser(const char* ws_header){
 
 	return false;
 }
+
+void Websocket::frame_decode(char* buffer){
+	int len=(int)buffer[1]&0x7f;
+	unsigned char mask[4]={buffer[2],buffer[3],buffer[4],buffer[5]};
+	for (int i = 6; i < len+6; ++i)
+	{
+		buffer[i] = buffer[i]^mask[(i-6)%4];
+	}
+	printf("recvd: %s\n", buffer+6);
+}
+

@@ -15,17 +15,15 @@ using namespace std;
 
 #define MAX_PATH_LENGTH 1024
 
-namespace ojs{
-	class Exec
-	{
-	public:
-		Exec();
-		~Exec();
+class Exec
+{
+public:
+	Exec();
+	~Exec();
 
-		string execute(string);
-	
-		/* data */
-	};
-}
+	string execute(string);
+
+	/* data */
+};
 
 #endif
