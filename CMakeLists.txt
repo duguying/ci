@@ -17,6 +17,7 @@ include_directories("src")
 include_directories("deps")
 
 #############################################################
+
 set(
 	CORE_LIST 
 	${SRC_DIR}/ojcore.cc
@@ -28,7 +29,7 @@ set(
 	${SRC_DIR}/websocket/encrypt.cc
 	${DEP}/regex++/regex.cc
 	${DEP}/regex++/regexstate.cc
-	${SRC_DIR}/server/process.cc
+	${DEP}/fork/fork_windows.c
 	${SRC_DIR}/executer/exec.cc
 )
 
@@ -38,7 +39,6 @@ if(WIN32)
 	target_link_libraries(ojs ws2_32)
 else(UNIX)
 endif(WIN32)
-
 
 
 

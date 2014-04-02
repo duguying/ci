@@ -28,7 +28,21 @@ int main(int argc, char const *argv[])
 {
 	if (argc<=1)
 	{
-		cout<<"show help\n";
+		cout<<"fork\n";
+		int rst=fork();
+		if (rst>0)// in father
+		{
+			cout<<"in father\n";
+		}else if (rst==0) // in son
+		{
+			cout<<"in son\n";
+			while(1){
+				Sleep(1);
+			}
+		}else{
+			cout<<"fork faild\n";
+		}
+
 	}else{// may =2
 		if (!strcmp(argv[1],"start"))
 		{
@@ -43,6 +57,7 @@ int main(int argc, char const *argv[])
 			}
 		}else{
 			cout<<"unknow args\n";
+			
 		}
 	}
 
@@ -53,9 +68,9 @@ int main(int argc, char const *argv[])
 
 	
 
-	// while(1){
-	// 	Sleep(1);
-	// }
+	while(1){
+		Sleep(1);
+	}
 	
 	// Exec ex;
 	// string result=ex.execute("ping www.baidu.com");
