@@ -29,8 +29,9 @@ set(
 	${SRC_DIR}/websocket/encrypt.cc
 	${DEP}/regex++/regex.cc
 	${DEP}/regex++/regexstate.cc
-	${DEP}/fork/fork_windows.c
+	# ${DEP}/fork/fork_windows.c
 	${SRC_DIR}/executer/exec.cc
+	# ${SRC_DIR}/server/process.cc
 )
 
 add_executable(ojs ${CORE_LIST})

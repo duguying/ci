@@ -24,25 +24,41 @@ int deal_msg(char* response, SOCKET sid, void* websocket){
 	return 0;
 }
 
+void father(){
+	cout<<"father, hello world!\n";
+
+	// Exec ex;
+	// string result=ex.execute("ping www.baidu.com");
+	// cout<<result<<endl;
+	
+	
+	
+	while(true){
+		Sleep(1);
+	}
+}
+
+void son(){
+	// cout<<"son, hello world!\n";
+	
+	Exec ex;
+	string result=ex.execute("ping www.baidu.com");
+	cout<<result<<endl;
+
+	// Socket ts("127.0.0.1",107);
+	// ts.dealmsg=deal_msg;
+	// ts.start();
+	
+	while(true){
+		Sleep(1);
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 	if (argc<=1)
 	{
-		cout<<"fork\n";
-		int rst=fork();
-		if (rst>0)// in father
-		{
-			cout<<"in father\n";
-		}else if (rst==0) // in son
-		{
-			cout<<"in son\n";
-			while(1){
-				Sleep(1);
-			}
-		}else{
-			cout<<"fork faild\n";
-		}
-
+		// Process::pfork(father,son);
 	}else{// may =2
 		if (!strcmp(argv[1],"start"))
 		{
@@ -62,19 +78,11 @@ int main(int argc, char const *argv[])
 	}
 
 
-	// Socket ts("127.0.0.1",107);
-	// ts.dealmsg=deal_msg;
-	// ts.start();
-
 	
 
-	while(1){
-		Sleep(1);
-	}
 	
-	// Exec ex;
-	// string result=ex.execute("ping www.baidu.com");
-	// cout<<result<<endl;
+	
+	
 
 	return 0;
 }
