@@ -6,7 +6,7 @@
 
 #pragma warning(disable : 4786)
 
-#include "regex++/regex.hh"
+#include "utils/pcre.hh"
 #include "websocket/encrypt.hh"
 
 using namespace std;

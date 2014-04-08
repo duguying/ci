@@ -2,7 +2,6 @@ project(ojserver)
 
 ############################################################
 # Debug support
-set(CMAKE_BUILD_TYPE "Debug")
 add_definitions("-D_CRT_SECURE_NO_DEPRECATE")
 add_definitions("-wd4819")
 # root directory
@@ -15,6 +14,9 @@ set(EXECUTABLE_OUTPUT_PATH bin)
 include_directories("src/include")
 include_directories("src")
 include_directories("deps")
+include_directories("C:/Program Files (x86)/PCRE/include")
+
+link_directories("C:/Program Files (x86)/PCRE/lib")
 
 #############################################################
 
@@ -27,22 +29,28 @@ set(
 	${DEP}/base64/base64.cc
 	${DEP}/sha1/sha1.cc
 	${SRC_DIR}/websocket/encrypt.cc
-	${DEP}/regex++/regex.cc
-	${DEP}/regex++/regexstate.cc
-	# ${DEP}/fork/fork_windows.c
+	${SRC_DIR}/utils/pcre.cc
+	
 	${SRC_DIR}/executer/exec.cc
-	# ${SRC_DIR}/server/process.cc
+	
 )
 
 add_executable(ojs ${CORE_LIST})
 
 if(WIN32)
-	target_link_libraries(ojs ws2_32)
+	target_link_libraries(ojs ws2_32 pcred)
 else(UNIX)
 endif(WIN32)
 
+#
 
-
+set(
+	PCRE_TEST 
+	${TEST_DIR}/pcre.cc
+	${SRC_DIR}/utils/pcre.cc
+)
+add_executable(test_pcre ${PCRE_TEST})
+target_link_libraries(test_pcre pcred)
 
 
 
