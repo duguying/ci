@@ -16,16 +16,17 @@ else(UNIX)
 	set(WGET wget)
 	set(UNZIP unzip)
 endif(WIN32)
+
+include(deps/CMakeLists.txt)
+
 # output directory
 set(EXECUTABLE_OUTPUT_PATH bin)
 
 include_directories("src/include")
 include_directories("src")
 include_directories("deps")
-include_directories("C:/Program Files (x86)/PCRE/include")
+link_directories(${PCRE_HOME_PATH}/lib)
 
-link_directories("C:/Program Files (x86)/PCRE/lib")
-link_directories(${PCRE_PATH})
 
 #############################################################
 
@@ -44,15 +45,14 @@ set(
 )
 
 add_executable(ojs ${CORE_LIST})
+ADD_DEPENDENCIES(ojs pcre_dir)
+
+
 
 if(WIN32)
-	target_link_libraries(ojs ws2_32 pcred)
+	target_link_libraries(ojs ws2_32 pcre)
 else(UNIX)
 endif(WIN32)
-
-#
-include(deps/CMakeLists.txt)
-#
 
 set(
 	PCRE_TEST 
@@ -60,8 +60,8 @@ set(
 	${SRC_DIR}/utils/pcre.cc
 )
 add_executable(test_pcre ${PCRE_TEST})
-target_link_libraries(test_pcre pcred)
-
+target_link_libraries(test_pcre pcre)
+ADD_DEPENDENCIES(test_pcre pcre_dir)
 
 
 

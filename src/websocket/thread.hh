@@ -10,7 +10,7 @@ using namespace std;
 /**
  * fun为hook函数的函数名，必须，其命名遵循函数名命名规则
  */
-#define THR_HOOK(fun, arg)	DWORD WINAPI fun(LPVOID arg) 	//hook函数简写方式
+#define THR_HOOK(fun, arg)	DWORD WINAPI fun(LPVOID arg) 	
 /**
  * hook函数的结尾方式
  */

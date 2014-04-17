@@ -7,18 +7,19 @@ ADD_CUSTOM_COMMAND(
 	COMMENT "downloading pcre, please wait..."
 )
 
-ADD_CUSTOM_TARGET(pcre ALL
+ADD_CUSTOM_TARGET(pcre_dir ALL
 	DEPENDS ${CMAKE_BINARY_DIR}/pcre.zip
 	COMMAND ${UNZIP} -X -n -q ${CMAKE_BINARY_DIR}/pcre.zip
 	COMMENT "unzipping pcre, please wait..."
 )
 
+
+
 FIND_PATH(
-   PCRE_PATH
-   pcre.lib
-   ${CMAKE_CURRENT_SOURCE_DIR}/build/*/lib/
-   ${CMAKE_CURRENT_SOURCE_DIR}/build/lib/
-   DEPENDS pcre
+   PCRE_HOME_PATH
+   lib/pcre.lib
+   ${CMAKE_CURRENT_SOURCE_DIR}/build/
+   DEPENDS pcre_dir
 )
 
 

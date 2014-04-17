@@ -1,6 +1,6 @@
 #define PCRE_STATIC
 
-#include "pcre.h"
+#include "pcre/pcre.h"
 #include "iostream"
 
 using namespace std;

@@ -38,7 +38,7 @@ public:
 	bool shaked_hands;
 	/// 握手返回信息
 	string handshake_response;
-	/// 当前连接的头部信息
+
 	ojs_table_item header[20];
 
 	char* header_content;
