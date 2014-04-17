@@ -8,6 +8,14 @@ add_definitions("-wd4819")
 set(SRC_DIR "src/")
 set(TEST_DIR "tests/")
 set(DEP "deps/")
+set(TOOLS "${CMAKE_CURRENT_SOURCE_DIR}/tools/")
+if(WIN32)
+	set(WGET ${TOOLS}wget.exe)
+	set(UNZIP ${TOOLS}unzip.exe)
+else(UNIX)
+	set(WGET wget)
+	set(UNZIP unzip)
+endif(WIN32)
 # output directory
 set(EXECUTABLE_OUTPUT_PATH bin)
 
@@ -17,6 +25,7 @@ include_directories("deps")
 include_directories("C:/Program Files (x86)/PCRE/include")
 
 link_directories("C:/Program Files (x86)/PCRE/lib")
+link_directories(${PCRE_PATH})
 
 #############################################################
 
@@ -30,9 +39,8 @@ set(
 	${DEP}/sha1/sha1.cc
 	${SRC_DIR}/websocket/encrypt.cc
 	${SRC_DIR}/utils/pcre.cc
-	
+	${SRC_DIR}/websocket/process.cc
 	${SRC_DIR}/executer/exec.cc
-	
 )
 
 add_executable(ojs ${CORE_LIST})
@@ -42,6 +50,8 @@ if(WIN32)
 else(UNIX)
 endif(WIN32)
 
+#
+include(deps/CMakeLists.txt)
 #
 
 set(

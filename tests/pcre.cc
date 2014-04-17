@@ -20,6 +20,8 @@ int main(int argc, char const *argv[])
 	memset(tmp,0,pos[1]+1);
 	strncpy(tmp,src+pos[0],pos[1]);
 	printf("substring:%s\n", tmp);
+	free(tmp);
+	tmp=NULL;
  
 	return 0;
 }

@@ -70,41 +70,40 @@ bool Websocket::header_parser(const char* ws_header){
 		}
 	}
 
-	// Regex re;
-	// re.compile("Sec-WebSocket-Key");
+	Regex re;
+	re.compile("Sec-WebSocket-Key");
 
-	/// Here should be rewrite
+	for (int k = 0; k < 20; ++k)
+	{
+		char* request_key=this->header[k].key;
 
-	// for (int k = 0; k < 20; ++k)
-	// {
-	// 	char* request_key=this->header[k].key;
+		if (re.exec(request_key)>0)
+		{
+			int len=strlen(this->header[k].value);
+			for (int i = 0; i < len+1; ++i)
+			{
+				if (this->header[k].value[i]==' ')
+				{
+					this->header[k].value++;
+				}else{
+					break;
+				}
+			}
 
-	// 	if (re.Match(request_key))
-	// 	{
-	// 		int len=strlen(this->header[k].value);
-	// 		for (int i = 0; i < len+1; ++i)
-	// 		{
-	// 			if (this->header[k].value[i]==' ')
-	// 			{
-	// 				this->header[k].value++;
-	// 			}else{
-	// 				break;
-	// 			}
-	// 		}
+			string key_appended=Websocket::key;
+			char request_key_char_buffer[50];
 
-	// 		string key_appended=Websocket::key;
-	// 		char request_key_char_buffer[50];
+			memset(request_key_char_buffer,0,50);
+			strncpy(request_key_char_buffer,this->header[k].value,strlen(this->header[k].value));
+			strcat(request_key_char_buffer,key_appended.c_str());
+			string after_encode=base64_encode(sha1_decimal(request_key_char_buffer));
+			this->handshake_response="HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: "+after_encode+"\r\nServer: Rex\r\n\r\n";
+			return true;
+			// break;
+		}
 
-	// 		memset(request_key_char_buffer,0,50);
-	// 		strncpy(request_key_char_buffer,this->header[k].value,strlen(this->header[k].value));
-	// 		strcat(request_key_char_buffer,key_appended.c_str());
-	// 		string after_encode=base64_encode(sha1_decimal(request_key_char_buffer));
-	// 		this->handshake_response="HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: "+after_encode+"\r\nServer: Rex\r\n\r\n";
-	// 		return true;
-	// 		// break;
-	// 	}
+	}
 
-	// }
 
 	return false;
 }
