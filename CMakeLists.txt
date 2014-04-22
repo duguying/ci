@@ -2,8 +2,13 @@ project(ojserver)
 
 ############################################################
 # Debug support
-add_definitions("-D_CRT_SECURE_NO_DEPRECATE")
-add_definitions("-wd4819")
+set(TEST true)
+set(CMAKE_BUILD_TYPE "Release")
+add_definitions(
+	"-D_CRT_SECURE_NO_DEPRECATE"
+	"-wd4819"
+)
+
 # root directory
 set(SRC_DIR "src/")
 set(TEST_DIR "tests/")
@@ -40,14 +45,11 @@ if(WIN32)
 else(UNIX)
 endif(WIN32)
 
-set(
-	PCRE_TEST 
-	${TEST_DIR}/pcre.cc
-	${SRC_DIR}/utils/pcre.cc
-)
-add_executable(test_pcre ${PCRE_TEST})
-target_link_libraries(test_pcre pcred)
 
 
+if(TEST)
+	ENABLE_TESTING()
+	include(tests/CMakeLists.txt)
+endif(TEST)
 
 cmake_minimum_required(VERSION 2.8)
